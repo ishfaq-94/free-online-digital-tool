@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Image-to-Text Converter - Free OCR Tool | Convert Images Now</title>
-    <meta name="description" content="Convert images to text with our free Image-to-Text Converter. Fast, accurate OCR for photos and scans. Try this online tool today!">
-    <meta name="keywords" content="image to text, OCR tool, free image converter, text extractor, online OCR">
+    <title>BMI Calculator - Free Body Mass Index Tool | Calculate Now</title>
+    <meta name="description" content="Calculate your BMI with our free BMI Calculator. Fast, accurate Body Mass Index results for health tracking. Try this online tool now!">
+    <meta name="keywords" content="BMI calculator, Body Mass Index, health calculator, free BMI tool, weight calculator">
     <meta name="author" content="xAI Team">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -51,83 +50,29 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        #upload-zone {
+        .calculator {
             width: 500px;
-            height: 200px;
             margin: 20px auto;
-            border: 2px dashed #CCCCCC;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: border-color 0.3s;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        #upload-zone.dragover {
-            border-color: #6200ea;
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #333;
         }
 
-        .browse {
-            color: #6200ea;
-            text-decoration: underline;
-        }
-
-        #file-input {
-            display: none;
-        }
-
-        #preview {
-            max-width: 150px;
-            margin: 10px auto;
-            display: none;
-        }
-
-        #feedback {
-            color: #00CC00;
-            display: none;
-        }
-
-        #loading {
-            display: none;
-            margin: 20px auto;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #6200ea;
-            border-top: 5px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        #ad {
-            width: 468px;
-            height: 60px;
-            background: #F0F0F0;
-            margin: 10px auto;
-            display: none;
-            line-height: 60px;
-        }
-
-        #output {
-            width: 600px;
-            height: 300px;
-            margin: 20px auto;
-            border: 1px solid #E0E0E0;
+        input[type="number"] {
+            width: 100%;
             padding: 10px;
-            resize: none;
-            display: none;
-        }
-
-        .button-group {
-            margin: 10px 0;
+            margin-bottom: 10px;
+            border: 1px solid #E0E0E0;
+            border-radius: 5px;
+            font-size: 16px;
         }
 
         .button {
@@ -137,7 +82,7 @@
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            margin: 0 5px;
+            margin: 5px;
             transition: background 0.2s;
         }
 
@@ -145,129 +90,115 @@
             background: #3700b3;
         }
 
-        .button:disabled {
-            background: #CCCCCC;
-            cursor: not-allowed;
+        #result, #category {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        #category {
+            font-weight: bold;
+        }
+
+        #ad {
+            width: 468px;
+            height: 60px;
+            background: #F0F0F0;
+            margin: 20px auto;
+            line-height: 60px;
         }
 
         @media (max-width: 768px) {
             h1 { font-size: 32px; }
             p { font-size: 16px; }
-            #upload-zone { width: 100%; height: 150px; }
+            .calculator { width: 90%; }
             #demo-animation { width: 100%; }
-            #output { width: 100%; }
             #ad { width: 320px; height: 50px; line-height: 50px; }
         }
     </style>
 </head>
 <body>
-    <h1>Convert Images to Text - Free & Easy, Unlimited Usage!</h1>
-    <p>No limits, no catch—just fast, accurate text extraction.</p>
-    <button class="cta-button">Start Converting Now</button>
-    <div id="demo-animation">Sample Demo Animation</div>
+    <h1>BMI Calculator - Free & Easy, Track Your Health Now!</h1>
+    <p>No limits, no sign-ups—just fast, accurate BMI results.</p>
+    <button class="cta-button">Calculate Your BMI Now</button>
+    <div id="demo-animation">Sample BMI Calculation Demo</div>
 
-    <div id="upload-zone">
-        Drag & Drop Here or <span class="browse">Browse Files</span>
-        <input type="file" id="file-input" accept="image/*">
+    <div class="calculator">
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" placeholder="Enter height in cm" step="0.1">
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" placeholder="Enter weight in kg" step="0.1">
+        <button class="button" id="calculate-btn">Calculate BMI</button>
+        <p id="result">Your BMI will appear here...</p>
+        <p id="category"></p>
+        <button class="button" id="clear-btn">Clear</button>
     </div>
-    <p id="feedback">Image uploaded successfully!</p>
-    <img id="preview" alt="Preview">
-    <div id="loading">
-        <div class="spinner"></div>
-        <p>Processing your image...</p>
-    </div>
-    <div id="ad">Ad: Try [Product] for productivity!</div>
-    <textarea id="output" placeholder="Extracted text will appear here..."></textarea>
-    <div class="button-group">
-        <button class="button" id="copy-btn" disabled>Copy</button>
-        <button class="button" id="download-btn" disabled>Download TXT</button>
-        <button class="button" id="reprocess-btn" disabled>Reprocess Image</button>
+
+    <div id="ad">
+        <!-- Google AdSense Placeholder - Replace with your Ad Unit ID -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-YOUR_AD_UNIT_ID"
+             data-ad-slot="YOUR_AD_UNIT_ID"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
 
     <script>
-        const uploadZone = document.getElementById('upload-zone');
-        const fileInput = document.getElementById('file-input');
-        const preview = document.getElementById('preview');
-        const feedback = document.getElementById('feedback');
-        const loading = document.getElementById('loading');
-        const ad = document.getElementById('ad');
-        const output = document.getElementById('output');
-        const copyBtn = document.getElementById('copy-btn');
-        const downloadBtn = document.getElementById('download-btn');
-        const reprocessBtn = document.getElementById('reprocess-btn');
+        const heightInput = document.getElementById('height');
+        const weightInput = document.getElementById('weight');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const result = document.getElementById('result');
+        const category = document.getElementById('category');
 
-        let currentFile = null;
+        calculateBtn.addEventListener('click', calculateBMI);
+        clearBtn.addEventListener('click', clearFields);
 
-        uploadZone.addEventListener('click', () => fileInput.click());
-        uploadZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadZone.classList.add('dragover');
-        });
-        uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
-        uploadZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadZone.classList.remove('dragover');
-            handleFile(e.dataTransfer.files[0]);
-        });
-        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+        function calculateBMI() {
+            const height = parseFloat(heightInput.value);
+            const weight = parseFloat(weightInput.value);
 
-        function handleFile(file) {
-            if (!file || !file.type.startsWith('image/')) {
-                alert('Please upload a valid image file.');
+            if (isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
+                result.textContent = 'Please enter valid height and weight values.';
+                category.textContent = '';
                 return;
             }
-            currentFile = file;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-                feedback.style.display = 'block';
-                processImage(file);
-            };
-            reader.readAsDataURL(file);
+
+            const bmi = weight / ((height / 100) * (height / 100));
+            result.textContent = `Your BMI is: ${bmi.toFixed(2)}`;
+
+            if (bmi < 18.5) {
+                category.textContent = 'Category: Underweight';
+                category.style.color = '#ff5722';
+            } else if (bmi >= 18.5 && bmi < 25) {
+                category.textContent = 'Category: Normal Weight';
+                category.style.color = '#4caf50';
+            } else if (bmi >= 25 && bmi < 30) {
+                category.textContent = 'Category: Overweight';
+                category.style.color = '#ff9800';
+            } else {
+                category.textContent = 'Category: Obese';
+                category.style.color = '#f44336';
+            }
         }
 
-        async function processImage(file) {
-            loading.style.display = 'block';
-            ad.style.display = 'block';
-            output.style.display = 'none';
-            copyBtn.disabled = true;
-            downloadBtn.disabled = true;
-            reprocessBtn.disabled = true;
-
-            const { data: { text } } = await Tesseract.recognize(file, 'eng', {
-                logger: (m) => console.log(m)
-            });
-
-            loading.style.display = 'none';
-            ad.style.display = 'none';
-            output.value = text;
-            output.style.display = 'block';
-            copyBtn.disabled = false;
-            downloadBtn.disabled = false;
-            reprocessBtn.disabled = false;
+        function clearFields() {
+            heightInput.value = '';
+            weightInput.value = '';
+            result.textContent = 'Your BMI will appear here...';
+            category.textContent = '';
         }
-
-        copyBtn.addEventListener('click', () => {
-            output.select();
-            document.execCommand('copy');
-            copyBtn.textContent = 'Copied!';
-            setTimeout(() => copyBtn.textContent = 'Copy', 2000);
-        });
-
-        downloadBtn.addEventListener('click', () => {
-            const blob = new Blob([output.value], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'extracted-text.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-        });
-
-        reprocessBtn.addEventListener('click', () => {
-            if (currentFile) processImage(currentFile);
-        });
     </script>
+
+    <!-- Description for Reference (Not Visible on Page) -->
+    <div style="display: none;">
+        <h2>BMI Calculator Description</h2>
+        <p>"Calculate your Body Mass Index with our free BMI Calculator! Simply enter your height and weight to get instant, accurate BMI results—no sign-ups needed. This online health calculator dynamically displays your BMI value and category (Underweight, Normal Weight, Overweight, Obese) in a sleek, purple-themed interface (#6200ea). Optimized for all devices with a responsive design, it’s user-friendly, ad-supported, and packed with features like hover effects and error handling for valid inputs. Discover your health status today with the best free BMI Calculator tool!"</p>
+    </div>
 </body>
 </html>
