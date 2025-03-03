@@ -51,25 +51,43 @@
         <!-- BMI Calculator -->
         <div class="tool">
             <img src="https://cdn-icons-png.flaticon.com/512/1995/1995456.png" alt="BMI Calculator Icon">
-            <a href="https://www.example-bmi-calculator.com" target="_blank">BMI Calculator</a>
+            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/bmi-calculator" target="_blank">BMI Calculator</a>
         </div>
 
         <!-- Currency Exchange Converter -->
         <div class="tool">
             <img src="https://cdn-icons-png.flaticon.com/512/3135/3135689.png" alt="Currency Converter Icon">
-            <a href="https://www.example-currency-converter.com" target="_blank">Currency Converter</a>
+            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/currency-converter" target="_blank">Currency Converter</a>
         </div>
 
         <!-- Age Calculator -->
         <div class="tool">
             <img src="https://cdn-icons-png.flaticon.com/512/3209/3209260.png" alt="Age Calculator Icon">
-            <a href="https://www.example-age-calculator.com" target="_blank">Age Calculator</a>
+            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/Age-calculator" target="_blank">Age Calculator</a>
         </div>
 
         <!-- Image Compressor -->
         <div class="tool">
             <img src="https://cdn-icons-png.flaticon.com/512/4710/4710624.png" alt="Image Compressor Icon">
-            <a href="https://www.example-image-compressor.com" target="_blank">Image Compressor</a>
+            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/compress-image-online" target="_blank">Image Compressor</a>
+        </div>
+
+        <!-- Image to Text Converter -->
+        <div class="tool">
+            <img src="https://cdn-icons-png.flaticon.com/512/3022/3022851.png" alt="Image to Text Converter Icon">
+            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/online-image-to-%20text-tool" target="_blank">Image to Text</a>
+        </div>
+
+        <!-- Countdown Timer -->
+        <div class="tool">
+            <img src="https://cdn-icons-png.flaticon.com/512/3112/3112035.png" alt="Countdown Timer Icon">
+            <a href="https://www.example-countdown-timer.com" target="_blank">Countdown Timer</a>
+        </div>
+
+        <!-- PDF Splitter and Merger -->
+        <div class="tool">
+            <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="PDF Splitter and Merger Icon">
+            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/Pdf%20merger%20pdf%20splitter" target="_blank">PDF Splitter/Merger</a>
         </div>
     </div>
 </body>
