@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Unit Converter</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .ad-banner {
+            background: #ecf0f1;
+            height: 100px;
+            margin: 1rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 728px;
+            max-width: 100%;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        /* Conversion Section */
+        .converter {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        select, input {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        /* Results */
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #ecf0f1;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        /* Sidebar Ads */
+        .sidebar {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .ad-square {
+            height: 250px;
+            background: #ecf0f1;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Universal Unit Converter</h1>
+        <!-- AdSense Header Ad -->
+        <div class="ad-banner">
+            <!-- Replace with your AdSense code -->
+            <p>Header Ad (728x90)</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="converter">
+            <div class="input-group">
+                <select id="category">
+                    <option value="length">Length</option>
+                    <option value="mass">Mass</option>
+                    <option value="volume">Volume</option>
+                    <option value="temperature">Temperature</option>
+                    <option value="time">Time</option>
+                    <option value="area">Area</option>
+                </select>
+                <input type="number" id="inputValue" placeholder="Enter value">
+            </div>
+
+            <div class="input-group">
+                <select id="fromUnit"></select>
+                <select id="toUnit"></select>
+            </div>
+
+            <button onclick="convert()">Convert</button>
+            <div class="result" id="result"></div>
+        </main>
+
+        <aside class="sidebar">
+            <!-- AdSense Sidebar Ads -->
+            <div class="ad-square">
+                <!-- Replace with your AdSense code -->
+                <p>Sidebar Ad (300x250)</p>
+            </div>
+            <div class="ad-square">
+                <!-- Replace with your AdSense code -->
+                <p>Sidebar Ad (300x250)</p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Unit Conversion Data
+        const units = {
+            length: {
+                meters: 1,
+                kilometers: 1000,
+                centimeters: 0.01,
+                millimeters: 0.001,
+                miles: 1609.34,
+                yards: 0.9144,
+                feet: 0.3048,
+                inches: 0.0254
+            },
+            mass: {
+                kilograms: 1,
+                grams: 0.001,
+                milligrams: 0.000001,
+                pounds: 0.453592,
+                ounces: 0.0283495
+            },
+            volume: {
+                liters: 1,
+                milliliters: 0.001,
+                cubicmeters: 1000,
+                gallons: 3.78541,
+                quarts: 0.946353,
+                pints: 0.473176
+            },
+            temperature: {
+                celsius: 'celsius',
+                fahrenheit: 'fahrenheit',
+                kelvin: 'kelvin'
+            },
+            time: {
+                seconds: 1,
+                minutes: 60,
+                hours: 3600,
+                days: 86400,
+                weeks: 604800,
+                years: 31536000
+            },
+            area: {
+                squaremeters: 1,
+                squarekilometers: 1000000,
+                squarefeet: 0.092903,
+                squaremiles: 2589988.11,
+                acres: 4046.86,
+                hectares: 10000
+            }
+        };
+
+        // Initialize Units
+        const categorySelect = document.getElementById('category');
+        const fromUnitSelect = document.getElementById('fromUnit');
+        const toUnitSelect = document.getElementById('toUnit');
+
+        function populateUnits() {
+            const category = categorySelect.value;
+            const unitOptions = Object.keys(units[category]);
+
+            fromUnitSelect.innerHTML = unitOptions.map(unit => 
+                `<option value="${unit}">${unit}</option>`
+            ).join('');
+            
+            toUnitSelect.innerHTML = unitOptions.map(unit => 
+                `<option value="${unit}">${unit}</option>`
+            ).join('');
+        }
+
+        categorySelect.addEventListener('change', populateUnits);
+        populateUnits();
+
+        // Conversion Logic
+        function convert() {
+            const inputValue = parseFloat(document.getElementById('inputValue').value);
+            const fromUnit = fromUnitSelect.value;
+            const toUnit = toUnitSelect.value;
+            const category = categorySelect.value;
+            
+            if (isNaN(inputValue)) {
+                document.getElementById('result').textContent = 'Please enter a valid number';
+                return;
+            }
+
+            let result;
+            if (category === 'temperature') {
+                result = convertTemperature(inputValue, fromUnit, toUnit);
+            } else {
+                const baseValue = inputValue * units[category][fromUnit];
+                result = baseValue / units[category][toUnit];
+            }
+
+            document.getElementById('result').textContent = 
+                `${inputValue} ${fromUnit} = ${result.toFixed(4)} ${toUnit}`;
+        }
+
+        function convertTemperature(value, fromUnit, toUnit) {
+            if (fromUnit === toUnit) return value;
+            
+            // Convert to Celsius first
+            let celsius;
+            switch(fromUnit) {
+                case 'celsius':
+                    celsius = value;
+                    break;
+                case 'fahrenheit':
+                    celsius = (value - 32) * 5/9;
+                    break;
+                case 'kelvin':
+                    celsius = value - 273.15;
+                    break;
+            }
+
+            // Convert to target unit
+            switch(toUnit) {
+                case 'celsius':
+                    return celsius;
+                case 'fahrenheit':
+                    return (celsius * 9/5) + 32;
+                case 'kelvin':
+                    return celsius + 273.15;
+            }
+        }
+    </script>
+
+    <!-- AdSense Footer -->
+    <div class="ad-banner" style="margin-top: 2rem;">
+        <!-- Replace with your AdSense code -->
+        <p>Footer Ad (728x90)</p>
+    </div>
+</body>
+</html>
