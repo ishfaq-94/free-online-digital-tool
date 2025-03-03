@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate your age easily with our responsive age calculator tool. Perfect for checking your age in years, months, days, hours, minutes, and seconds.">
+    <meta name="keywords" content="age calculator, calculate age, age tool, birthday calculator">
+    <title>Age Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .calculator-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        label {
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: left;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .ad-space {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Age Calculator</h1>
+    </header>
+
+    <main>
+        <div class="calculator-container">
+            <label for="birthdate">Enter your birthdate:</label>
+            <input type="date" id="birthdate" name="birthdate">
+            <button id="calculate-btn">Calculate Age</button>
+            <div id="result"></div>
+        </div>
+
+        <!-- AdSense Ad Unit -->
+        <div class="ad-space">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_ID" crossorigin="anonymous"></script>
+            <!-- Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="YOUR_ADSENSE_ID"
+                 data-ad-slot="YOUR_AD_UNIT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Age Calculator. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('calculate-btn').addEventListener('click', function () {
+            const birthdate = new Date(document.getElementById('birthdate').value);
+            const today = new Date();
+
+            if (isNaN(birthdate.getTime())) {
+                alert("Please enter a valid birthdate.");
+                return;
+            }
+
+            let years = today.getFullYear() - birthdate.getFullYear();
+            let months = today.getMonth() - birthdate.getMonth();
+            let days = today.getDate() - birthdate.getDate();
+            let hours = today.getHours() - birthdate.getHours();
+            let minutes = today.getMinutes() - birthdate.getMinutes();
+            let seconds = today.getSeconds() - birthdate.getSeconds();
+
+            // Adjust for negative values
+            if (seconds < 0) {
+                seconds += 60;
+                minutes--;
+            }
+            if (minutes < 0) {
+                minutes += 60;
+                hours--;
+            }
+            if (hours < 0) {
+                hours += 24;
+                days--;
+            }
+            if (days < 0) {
+                const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+                days += lastMonth.getDate();
+                months--;
+            }
+            if (months < 0) {
+                months += 12;
+                years--;
+            }
+
+            const result = `
+                Your age is:<br>
+                <strong>${years}</strong> years,<br>
+                <strong>${months}</strong> months,<br>
+                <strong>${days}</strong> days,<br>
+                <strong>${hours}</strong> hours,<br>
+                <strong>${minutes}</strong> minutes, and<br>
+                <strong>${seconds}</strong> seconds.
+            `;
+            document.getElementById('result').innerHTML = result;
+        });
+    </script>
+</body>
+</html>
