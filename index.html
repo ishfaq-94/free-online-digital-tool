@@ -3,92 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Digital Tools</title>
+    <title>All-in-One Online Tools</title>
     <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
+            background: #f4f4f9;
             color: #333;
+            line-height: 1.6;
         }
-        .tools-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 30px;
-        }
-        .tool {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        /* Header */
+        header {
+            background: #2c3e50;
+            color: white;
             padding: 20px;
-            width: 150px;
             text-align: center;
-            transition: transform 0.3s ease;
         }
-        .tool:hover {
-            transform: translateY(-10px);
-        }
-        .tool img {
-            width: 50px;
-            height: 50px;
+
+        header h1 {
+            font-size: 2.5rem;
             margin-bottom: 10px;
         }
-        .tool a {
+
+        header p {
+            font-size: 1.1rem;
+        }
+
+        /* AdSense Banner */
+        .ad-banner {
+            background: #ecf0f1;
+            height: 100px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 728px;
+            width: 100%;
+        }
+
+        .ad-banner p {
+            color: #777;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
             text-decoration: none;
             color: #333;
-            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .tool-card img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+        }
+
+        .tool-card h3 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .tool-card {
+                padding: 15px;
+            }
+
+            .tool-card img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .tool-card h3 {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Online Digital Tools</h1>
-    <div class="tools-container">
-        <!-- BMI Calculator -->
-        <div class="tool">
-            <img src="https://cdn-icons-png.flaticon.com/512/1995/1995456.png" alt="BMI Calculator Icon">
-            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/bmi-calculator" target="_blank">BMI Calculator</a>
-        </div>
+    <!-- Header -->
+    <header>
+        <h1>All-in-One Online Tools</h1>
+        <p>Your ultimate solution for everyday tools</p>
+    </header>
 
-        <!-- Currency Exchange Converter -->
-        <div class="tool">
-            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135689.png" alt="Currency Converter Icon">
-            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/age-calculator" target="_blank">Currency Converter</a>
-        </div>
+    <!-- AdSense Banner -->
+    <div class="ad-banner">
+        <!-- Replace with your AdSense code -->
+        <p>AdSense Banner (728x90)</p>
+    </div>
 
+    <!-- Tools Grid -->
+    <div class="tools-grid">
         <!-- Age Calculator -->
-        <div class="tool">
-            <img src="https://cdn-icons-png.flaticon.com/512/3209/3209260.png" alt="Age Calculator Icon">
-            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/Age-calculator" target="_blank">Age Calculator</a>
-        </div>
+        <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/age-calculator" class="tool-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3209/3209260.png" alt="Age Calculator">
+            <h3>Age Calculator</h3>
+        </a>
+
+        <!-- BMI Calculator -->
+        <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/bmi-calculator" class="tool-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1995/1995456.png" alt="BMI Calculator">
+            <h3>BMI Calculator</h3>
+        </a>
+
+        <!-- Unit Converter -->
+        <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/unit-converter" class="tool-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135689.png" alt="Unit Converter">
+            <h3>Unit Converter</h3>
+        </a>
+
+        <!-- Image to Text -->
+        <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/online-image-to-%20text-tool" class="tool-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3022/3022851.png" alt="Image to Text">
+            <h3>Image to Text</h3>
+        </a>
 
         <!-- Image Compressor -->
-        <div class="tool">
-            <img src="https://cdn-icons-png.flaticon.com/512/4710/4710624.png" alt="Image Compressor Icon">
-            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/compress-image-online" target="_blank">Image Compressor</a>
-        </div>
+        <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/compress-image-online" class="tool-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/4710/4710624.png" alt="Image Compressor">
+            <h3>Image Compressor</h3>
+        </a>
 
-        <!-- Image to Text Converter -->
-        <div class="tool">
-            <img src="https://cdn-icons-png.flaticon.com/512/3022/3022851.png" alt="Image to Text Converter Icon">
-            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/online-image-to-%20text-tool" target="_blank">Image to Text</a>
-        </div>
+        <!-- Currency Converter -->
+        <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/currency-converter" class="tool-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135689.png" alt="Currency Converter">
+            <h3>Currency Converter</h3>
+        </a>
 
-        <!-- Countdown Timer -->
-        <div class="tool">
-            <img src="https://cdn-icons-png.flaticon.com/512/3112/3112035.png" alt="Countdown Timer Icon">
-            <a href="https://www.example-countdown-timer.com" target="_blank">Countdown Timer</a>
-        </div>
+        <!-- PDF Merger -->
+        <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/pdf-merger" class="tool-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="PDF Merger">
+            <h3>PDF Merger</h3>
+        </a>
 
-        <!-- PDF Splitter and Merger -->
-        <div class="tool">
-            <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="PDF Splitter and Merger Icon">
-            <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/Pdf%20merger%20pdf%20splitter" target="_blank">PDF Splitter/Merger</a>
-        </div>
+        <!-- PDF Splitter -->
+        <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/pdf-splitter" class="tool-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="PDF Splitter">
+            <h3>PDF Splitter</h3>
+        </a>
+
+        <!-- Password Generator -->
+        <a href="https://github.com/ishfaq-94/free-online-digital-tool/blob/main/strong-password-generator" class="tool-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3064/3064155.png" alt="Password Generator">
+            <h3>Password Generator</h3>
+        </a>
     </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 All-in-One Online Tools. All rights reserved.</p>
+    </footer>
+
+    <!-- AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID"
+            crossorigin="anonymous"></script>
 </body>
 </html>
