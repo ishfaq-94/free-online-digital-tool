@@ -99,19 +99,6 @@
             border-radius: 5px;
         }
 
-        /* Output Options */
-        .output-options {
-            margin: 20px 0;
-        }
-
-        .output-options select {
-            padding: 10px;
-            width: 100%;
-            max-width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
         /* Action Buttons */
         .action-buttons {
             margin: 20px 0;
@@ -175,7 +162,7 @@
     <!-- Header -->
     <header>
         <h1>PDF Splitter Tool</h1>
-        <p>Split PDFs into pages and download as PDF, image, or text</p>
+        <p>Split PDFs into individual pages</p>
     </header>
 
     <!-- AdSense Banner -->
@@ -200,16 +187,6 @@
             <input type="text" id="pageRange" placeholder="Example: 1-3, 5, 7-10">
         </div>
 
-        <!-- Output Options -->
-        <div class="output-options">
-            <h2>Output Format</h2>
-            <select id="outputFormat">
-                <option value="pdf">PDF</option>
-                <option value="image">Image</option>
-                <option value="text">Text Document</option>
-            </select>
-        </div>
-
         <!-- Action Buttons -->
         <div class="action-buttons">
             <button onclick="splitPDF()">Split PDF</button>
@@ -218,9 +195,9 @@
 
         <!-- Result Section -->
         <div class="result-section" id="resultSection">
-            <h2>Download Result</h2>
+            <h2>Download Split Pages</h2>
             <p id="resultMessage"></p>
-            <a id="downloadLink" style="display: none;">Download</a>
+            <div id="downloadLinks"></div>
         </div>
     </div>
 
@@ -233,6 +210,9 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID"
             crossorigin="anonymous"></script>
 
+    <!-- PDF-LIB for PDF Manipulation -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
     <!-- PDF Processing Script -->
     <script>
         let pdfFile = null;
@@ -244,9 +224,8 @@
         });
 
         // Split PDF function
-        function splitPDF() {
+        async function splitPDF() {
             const pageRange = document.getElementById('pageRange').value;
-            const outputFormat = document.getElementById('outputFormat').value;
 
             if (!pdfFile) {
                 alert('Please upload a PDF file.');
@@ -258,14 +237,66 @@
                 return;
             }
 
-            // Simulate processing (replace with actual PDF processing logic)
-            document.getElementById('resultMessage').textContent = `Processing pages: ${pageRange} to ${outputFormat}...`;
-            setTimeout(() => {
-                document.getElementById('resultMessage').textContent = `Your ${outputFormat} is ready!`;
-                document.getElementById('downloadLink').style.display = 'block';
-                document.getElementById('downloadLink').href = '#'; // Replace with actual download link
-                document.getElementById('downloadLink').download = `split-result.${outputFormat}`;
-            }, 2000);
+            // Parse page range (e.g., "1-3, 5, 7-10")
+            const pagesToExtract = parsePageRange(pageRange);
+
+            // Load PDF file
+            const arrayBuffer = await pdfFile.arrayBuffer();
+            const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+            const totalPages = pdfDoc.getPageCount();
+
+            // Validate page range
+            if (pagesToExtract.some(page => page < 1 || page > totalPages)) {
+                alert(`Invalid page range. The PDF has only ${totalPages} pages.`);
+                return;
+            }
+
+            // Extract selected pages
+            const resultSection = document.getElementById('resultSection');
+            const resultMessage = document.getElementById('resultMessage');
+            const downloadLinks = document.getElementById('downloadLinks');
+
+            resultMessage.textContent = 'Splitting PDF...';
+            downloadLinks.innerHTML = '';
+
+            for (const pageNumber of pagesToExtract) {
+                const newPdfDoc = await PDFLib.PDFDocument.create();
+                const [copiedPage] = await newPdfDoc.copyPages(pdfDoc, [pageNumber - 1]);
+                newPdfDoc.addPage(copiedPage);
+
+                const pdfBytes = await newPdfDoc.save();
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `page-${pageNumber}.pdf`;
+                link.textContent = `Download Page ${pageNumber}`;
+                link.style.display = 'block';
+                link.style.margin = '10px 0';
+                downloadLinks.appendChild(link);
+            }
+
+            resultMessage.textContent = 'Your split pages are ready!';
+        }
+
+        // Parse page range input
+        function parsePageRange(pageRange) {
+            const pages = new Set();
+            const ranges = pageRange.split(',');
+
+            for (const range of ranges) {
+                if (range.includes('-')) {
+                    const [start, end] = range.split('-').map(Number);
+                    for (let i = start; i <= end; i++) {
+                        pages.add(i);
+                    }
+                } else {
+                    pages.add(Number(range));
+                }
+            }
+
+            return Array.from(pages).sort((a, b) => a - b);
         }
 
         // Reset form
@@ -274,10 +305,9 @@
             document.getElementById('pdfFile').value = '';
             document.getElementById('fileName').textContent = '';
             document.getElementById('pageRange').value = '';
-            document.getElementById('outputFormat').value = 'pdf';
             document.getElementById('resultMessage').textContent = '';
-            document.getElementById('downloadLink').style.display = 'none';
+            document.getElementById('downloadLinks').innerHTML = '';
         }
     </script>
 </body>
-    </html>
+            </html>
