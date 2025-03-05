@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Converter Tool</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+        }
+
+        /* AdSense Banner */
+        .ad-banner {
+            background: #ecf0f1;
+            height: 100px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 728px;
+            width: 100%;
+        }
+
+        .ad-banner p {
+            color: #777;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .upload-section input[type="file"] {
+            display: none;
+        }
+
+        .upload-section label {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .upload-section label:hover {
+            background: #2980b9;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            margin: 20px 0;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Output Options */
+        .output-options {
+            margin: 20px 0;
+        }
+
+        .output-options select {
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            margin: 20px 0;
+        }
+
+        .action-buttons button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .action-buttons button:hover {
+            background: #219653;
+        }
+
+        /* Result Section */
+        .result-section {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .result-section a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .result-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .upload-section label {
+                padding: 8px 16px;
+            }
+
+            .action-buttons button {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Image Converter Tool</h1>
+        <p>Convert images to JPG, PNG, WebP, and more</p>
+    </header>
+
+    <!-- AdSense Banner -->
+    <div class="ad-banner">
+        <!-- Replace with your AdSense code -->
+        <p>AdSense Banner (728x90)</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h2>Upload Your Image</h2>
+            <input type="file" id="imageInput" accept="image/*">
+            <label for="imageInput">Choose Image</label>
+            <div class="image-preview">
+                <img id="previewImage" src="#" alt="Image Preview" style="display: none;">
+            </div>
+        </div>
+
+        <!-- Output Options -->
+        <div class="output-options">
+            <h2>Select Output Format</h2>
+            <select id="outputFormat">
+                <option value="jpg">JPG</option>
+                <option value="png">PNG</option>
+                <option value="webp">WebP</option>
+                <option value="bmp">BMP</option>
+            </select>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button onclick="convertImage()">Convert Image</button>
+            <button onclick="resetForm()">Reset</button>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section" id="resultSection">
+            <h2>Download Converted Image</h2>
+            <p id="resultMessage"></p>
+            <a id="downloadLink" style="display: none;">Download</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 Image Converter Tool. All rights reserved.</p>
+    </footer>
+
+    <!-- AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID"
+            crossorigin="anonymous"></script>
+
+    <!-- Image Processing Script -->
+    <script>
+        let imageFile = null;
+
+        // Handle image upload
+        document.getElementById('imageInput').addEventListener('change', function (e) {
+            imageFile = e.target.files[0];
+            const previewImage = document.getElementById('previewImage');
+            previewImage.src = URL.createObjectURL(imageFile);
+            previewImage.style.display = 'block';
+        });
+
+        // Convert image function
+        function convertImage() {
+            const outputFormat = document.getElementById('outputFormat').value;
+
+            if (!imageFile) {
+                alert('Please upload an image.');
+                return;
+            }
+
+            // Simulate processing (replace with actual image conversion logic)
+            document.getElementById('resultMessage').textContent = `Converting to ${outputFormat.toUpperCase()}...`;
+            setTimeout(() => {
+                document.getElementById('resultMessage').textContent = `Your ${outputFormat.toUpperCase()} image is ready!`;
+                document.getElementById('downloadLink').style.display = 'block';
+                document.getElementById('downloadLink').href = '#'; // Replace with actual download link
+                document.getElementById('downloadLink').download = `converted-image.${outputFormat}`;
+            }, 2000);
+        }
+
+        // Reset form
+        function resetForm() {
+            imageFile = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('previewImage').src = '#';
+            document.getElementById('previewImage').style.display = 'none';
+            document.getElementById('outputFormat').value = 'jpg';
+            document.getElementById('resultMessage').textContent = '';
+            document.getElementById('downloadLink').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
