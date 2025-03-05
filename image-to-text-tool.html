@@ -3,151 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image to Text Tool</title>
-    <meta name="description" content="Extract text from images easily with our responsive image to text tool. Convert images to text with ease.">
+    <title>Image to Text Converter</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        /* Global Styles */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+        }
+
+        /* AdSense Banner */
+        .ad-banner {
+            background: #ecf0f1;
+            height: 100px;
+            margin: 20px auto;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-
-        header {
-            background: #6200ea;
-            color: #fff;
-            padding: 20px 0;
+            max-width: 728px;
             width: 100%;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        main {
-            background: #fff;
+        .ad-banner p {
+            color: #777;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
-            border-radius: 8px;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 600px;
-            margin: 20px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        input[type="file"] {
-            padding: 10px;
-            border: 2px dashed #6200ea;
-            border-radius: 8px;
             text-align: center;
-            cursor: pointer;
         }
 
-        button {
-            padding: 10px;
+        .upload-section input[type="file"] {
+            display: none;
+        }
+
+        .upload-section label {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .upload-section label:hover {
+            background: #2980b9;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            margin: 20px 0;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            margin: 20px 0;
+        }
+
+        .action-buttons button {
+            background: #27ae60;
+            color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
-            background-color: #6200ea;
-            color: #fff;
-            transition: background-color 0.3s ease;
+            margin: 5px;
         }
 
-        button:hover {
-            background-color: #3700b3;
+        .action-buttons button:hover {
+            background: #219653;
         }
 
-        #output {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 18px;
-            white-space: pre-wrap;
-        }
-
-        #ad-space {
-            margin-top: 20px;
+        /* Result Section */
+        .result-section {
+            margin: 20px 0;
             text-align: center;
         }
 
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #6200ea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+        .result-section textarea {
+            width: 100%;
+            max-width: 600px;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Arial', sans-serif;
+            font-size: 1rem;
+            resize: none;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .result-section a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .result-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .upload-section label {
+                padding: 8px 16px;
+            }
+
+            .action-buttons button {
+                padding: 8px 16px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
-        <h1>Image to Text Tool</h1>
+        <h1>Image to Text Converter</h1>
+        <p>Extract text from images using OCR</p>
     </header>
-    <main>
-        <form id="image-to-text-form">
-            <input type="file" id="image-input" accept="image/*" required>
-            <button type="submit">Extract Text</button>
-        </form>
-        <div id="output"></div>
-        <div id="ad-space">
-            <!-- Google AdSense Ad Unit -->
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_UNIT_ID"
-                    crossorigin="anonymous"></script>
-            <!-- Ad Unit -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-YOUR_AD_UNIT_ID"
-                 data-ad-slot="1234567890"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.4/dist/tesseract.min.js"></script>
-    <script>
-        document.getElementById('image-to-text-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const file = document.getElementById('image-input').files[0];
 
-            if (file) {
-                const output = document.getElementById('output');
-                output.innerHTML = '<div class="loader"></div>';
-                const text = await extractTextFromImage(file);
-                output.innerHTML = `<pre>${text}</pre>`;
-            }
+    <!-- AdSense Banner -->
+    <div class="ad-banner">
+        <!-- Replace with your AdSense code -->
+        <p>AdSense Banner (728x90)</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h2>Upload Your Image</h2>
+            <input type="file" id="imageInput" accept="image/*">
+            <label for="imageInput">Choose Image</label>
+            <div class="image-preview">
+                <img id="previewImage" src="#" alt="Image Preview" style="display: none;">
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button onclick="extractText()">Extract Text</button>
+            <button onclick="resetForm()">Reset</button>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section" id="resultSection">
+            <h2>Extracted Text</h2>
+            <textarea id="extractedText" placeholder="Extracted text will appear here..." readonly></textarea>
+            <br>
+            <a id="downloadLink" style="display: none;">Download Text</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 Image to Text Converter. All rights reserved.</p>
+    </footer>
+
+    <!-- AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID"
+            crossorigin="anonymous"></script>
+
+    <!-- Tesseract.js for OCR -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.5/dist/tesseract.min.js"></script>
+
+    <!-- Image Processing Script -->
+    <script>
+        let imageFile = null;
+
+        // Handle image upload
+        document.getElementById('imageInput').addEventListener('change', function (e) {
+            imageFile = e.target.files[0];
+            const previewImage = document.getElementById('previewImage');
+            previewImage.src = URL.createObjectURL(imageFile);
+            previewImage.style.display = 'block';
         });
 
-        async function extractTextFromImage(file) {
-            const { createWorker } = Tesseract;
-            const worker = createWorker({
-                logger: m => console.log(m)
-            });
+        // Extract text using Tesseract.js
+        async function extractText() {
+            if (!imageFile) {
+                alert('Please upload an image.');
+                return;
+            }
 
+            const resultSection = document.getElementById('resultSection');
+            const extractedText = document.getElementById('extractedText');
+            const downloadLink = document.getElementById('downloadLink');
+
+            extractedText.value = 'Extracting text...';
+            downloadLink.style.display = 'none';
+
+            // Use Tesseract.js for OCR
+            const worker = Tesseract.createWorker();
             await worker.load();
             await worker.loadLanguage('eng');
             await worker.initialize('eng');
-            const { data: { text } } = await worker.recognize(file);
+            const { data: { text } } = await worker.recognize(imageFile);
             await worker.terminate();
-            return text;
+
+            // Display extracted text
+            extractedText.value = text;
+            downloadLink.style.display = 'block';
+            downloadLink.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+            downloadLink.download = 'extracted-text.txt';
+        }
+
+        // Reset form
+        function resetForm() {
+            imageFile = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('previewImage').src = '#';
+            document.getElementById('previewImage').style.display = 'none';
+            document.getElementById('extractedText').value = '';
+            document.getElementById('downloadLink').style.display = 'none';
         }
     </script>
 </body>
-</html>
+                </html>
