@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Fingerprint Scanner</title>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --secondary: #2667cc;
+            --accent: #ff006e;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #06d6a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f1f8fe;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* AdSense Banners */
+        .ad-container {
+            background: #e9ecef;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            margin: 1.5rem 0;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Content */
+        .main-title {
+            text-align: center;
+            margin: 2rem 0;
+            color: var(--secondary);
+        }
+
+        /* Hands Container */
+        .hands-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .hand-section {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+        }
+
+        .hand-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        /* Finger Grid */
+        .finger-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .finger-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .finger-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .finger-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .finger-guide {
+            position: relative;
+            width: 100%;
+            height: 120px;
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .finger-guide img {
+            max-width: 60%;
+            opacity: 0.6;
+        }
+
+        .finger-canvas {
+            width: 100%;
+            height: 120px;
+            background: transparent;
+            border: 2px dashed #dee2e6;
+            border-radius: 0.5rem;
+            cursor: crosshair;
+            display: block;
+        }
+
+        .finger-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2a75e6;
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background: #e60063;
+        }
+
+        /* Camera Modal */
+        .camera-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .camera-view {
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        #videoElement {
+            width: 100%;
+            border-radius: 0.5rem;
+        }
+
+        .camera-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .close-camera {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            display: none;
+            margin: 1rem auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            .hand-section {
+                min-width: 100%;
+            }
+            
+            .finger-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span>🖐️</span>
+                <span>Complete Fingerprint Scanner</span>
+            </div>
+            <!-- AdSense Header -->
+            <div class="ad-container">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                     data-ad-slot="HEADER_AD"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="main-title">Capture All 10 Fingerprints</h1>
+        
+        <!-- Mid-Page Ad -->
+        <div class="ad-container">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                 data-ad-slot="MID_PAGE_AD"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+
+        <!-- Hands Container -->
+        <div class="hands-container">
+            <!-- Left Hand -->
+            <div class="hand-section">
+                <h2 class="hand-title">🖐️ Left Hand</h2>
+                <div class="finger-grid">
+                    <!-- Left Thumb -->
+                    <div class="finger-card">
+                        <div class="finger-title">👍 Left Thumb</div>
+                        <div class="finger-guide">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMjAsNDBIMzBWNTBIMjBaIiBmaWxsPSIjY2NjIi8+PHBhdGggZD0iTTMwLDQwVjUwQzMwLDYwLDQwLDcwLDUwLDcwQzYwLDcwLDcwLDYwLDcwLDUwVjQwIiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="Left Thumb Guide">
+                        </div>
+                        <canvas class="finger-canvas" width="250" height="120" data-finger="left-thumb"></canvas>
+                        <div class="finger-actions">
+                            <button class="btn btn-primary capture-btn" data-finger="left-thumb">📷 Scan</button>
+                            <button class="btn btn-secondary clear-btn" data-finger="left-thumb">🗑️ Clear</button>
+                            <button class="btn btn-accent download-btn" data-finger="left-thumb">⤵️ Save</button>
+                        </div>
+                    </div>
+
+                    <!-- Left Index -->
+                    <div class="finger-card">
+                        <div class="finger-title">☝️ Left Index</div>
+                        <div class="finger-guide">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMzAsMzBINDBWNDBIMzBaIiBmaWxsPSIjY2NjIi8+PHBhdGggZD0iTTQwLDMwVjQwQzQwLDUwLDUwLDYwLDYwLDYwQzcwLDYwLDgwLDUwLDgwLDQwVjMwIiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="Left Index Guide">
+                        </div>
+                        <canvas class="finger-canvas" width="250" height="120" data-finger="left-index"></canvas>
+                        <div class="finger-actions">
+                            <button class="btn btn-primary capture-btn" data-finger="left-index">📷 Scan</button>
+                            <button class="btn btn-secondary clear-btn" data-finger="left-index">🗑️ Clear</button>
+                            <button class="btn btn-accent download-btn" data-finger="left-index">⤵️ Save</button>
+                        </div>
+                    </div>
+
+                    <!-- Left Middle -->
+                    <div class="finger-card">
+                        <div class="finger-title">🖕 Left Middle</div>
+                        <div class="finger-guide">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMzUsMjVINDVWMzVIMzVaIiBmaWxsPSIjY2NjIi8+PHBhdGggZD0iTTQ1LDI1VjM1QzQ1LDQ1LDUwLDU1LDYwLDU1QzcwLDU1LDgwLDQ1LDgwLDM1VjI1IiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="Left Middle Guide">
+                        </div>
+                        <canvas class="finger-canvas" width="250" height="120" data-finger="left-middle"></canvas>
+                        <div class="finger-actions">
+                            <button class="btn btn-primary capture-btn" data-finger="left-middle">📷 Scan</button>
+                            <button class="btn btn-secondary clear-btn" data-finger="left-middle">🗑️ Clear</button>
+                            <button class="btn btn-accent download-btn" data-finger="left-middle">⤵️ Save</button>
+                        </div>
+                    </div>
+
+                    <!-- Left Ring -->
+                    <div class="finger-card">
+                        <div class="finger-title">💍 Left Ring</div>
+                        <div class="finger-guide">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMzAsMjBINDBWMzBIMzBaIiBmaWxsPSIjY2NjIi8+PHBhdGggZD0iTTQwLDIwVjMwQzQwLDQwLDUwLDUwLDYwLDUwQzcwLDUwLDgwLDQwLDgwLDMwVjIwIiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="Left Ring Guide">
+                        </div>
+                        <canvas class="finger-canvas" width="250" height="120" data-finger="left-ring"></canvas>
+                        <div class="finger-actions">
+                            <button class="btn btn-primary capture-btn" data-finger="left-ring">📷 Scan</button>
+                            <button class="btn btn-secondary clear-btn" data-finger="left-ring">🗑️ Clear</button>
+                            <button class="btn btn-accent download-btn" data-finger="left-ring">⤵️ Save</button>
+                        </div>
+                    </div>
+
+                    <!-- Left Little -->
+                    <div class="finger-card">
+                        <div class="finger-title">👈 Left Little</div>
+                        <div class="finger-guide">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMjUsMTVIMzVWMjVIMjVaIiBmaWxsPSIjY2NjIi8+PHBhdGggZD0iTTM1LDE1VjI1QzM1LDM1LDQwLDQ1LDUwLDQ1QzYwLDQ1LDcwLDM1LDcwLDI1VjE1IiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="Left Little Guide">
+                        </div>
+                        <canvas class="finger-canvas" width="250" height="120" data-finger="left-little"></canvas>
+                        <div class="finger-actions">
+                            <button class="btn btn-primary capture-btn" data-finger="left-little">📷 Scan</button>
+                            <button class="btn btn-secondary clear-btn" data-finger="left-little">🗑️ Clear</button>
+                            <button class="btn btn-accent download-btn" data-finger="left-little">⤵️ Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Hand -->
+            <div class="hand-section">
+                <h2 class="hand-title">🖐️ Right Hand</h2>
+                <div class="finger-grid">
+                    <!-- Right Thumb -->
+                    <div class="finger-card">
+                        <div class="finger-title">👍 Right Thumb</div>
+                        <div class="finger-guide">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNzAsNDBINjBWNTBINzBaIiBmaWxsPSIjY2NjIi8+PHBhdGggZD0iTTYwLDQwVjUwQzYwLDYwLDUwLDcwLDQwLDcwQzMwLDcwLDIwLDYwLDIwLDUwVjQwIiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="Right Thumb Guide">
+                        </div>
+                        <canvas class="finger-canvas" width="250" height="120" data-finger="right-thumb"></canvas>
+                        <div class="finger-actions">
+                            <button class="btn btn-primary capture-btn" data-finger="right-thumb">📷 Scan</button>
+                            <button class="btn btn-secondary clear-btn" data-finger="right-thumb">🗑️ Clear</button>
+                            <button class="btn btn-accent download-btn" data-finger="right-thumb">⤵️ Save</button>
+                        </div>
+                    </div>
+
+                    <!-- Right Index -->
+                    <div class="finger-card">
+                        <div class="finger-title">☝️ Right Index</div>
+                        <div class="finger-guide">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNzAsMzBINjBWNDBINzBaIiBmaWxsPSIjY2NjIi8+PHBhdGggZD0iTTYwLDMwVjQwQzYwLDUwLDUwLDYwLDQwLDYwQzMwLDYwLDIwLDUwLDIwLDQwVjMwIiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="Right Index Guide">
+                        </div>
+                        <canvas class="finger-canvas" width="250" height="120" data-finger="right-index"></canvas>
+                        <div class="finger-actions">
+                            <button class="btn btn-primary capture-btn" data-finger="right-index">📷 Scan</button>
+                            <button class="btn btn-secondary clear-btn" data-finger="right-index">🗑️ Clear</button>
+                            <button class="btn btn-accent download-btn" data-finger="right-index">⤵️ Save</button>
+                        </div>
+                    </div>
+
+                    <!-- Right Middle -->
+                    <div class="finger-card">
+                        <div class="finger-title">🖕 Right Middle</div>
+                        <div class="finger-guide">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNzUsMjVINjVWMzVINzVaIiBmaWxsPSIjY2NjIi8+PHBhdGggZD0iTTY1LDI1VjM1QzY1LDQ1LDYwLDU1LDUwLDU1QzQwLDU1LDMwLDQ1LDMwLDM1VjI1IiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="Right Middle Guide">
+                        </div>
+                        <canvas class="finger-canvas" width="250" height="120" data-finger="right-middle"></canvas>
+                        <div class="finger-actions">
+                            <button class="btn btn-primary capture-btn" data-finger="right-middle">📷 Scan</button>
+                            <button class="btn btn-secondary clear-btn" data-finger="right-middle">🗑️ Clear</button>
+                            <button class="btn btn-accent download-btn" data-finger="right-middle">⤵️ Save</button>
+                        </div>
+                    </div>
+
+                    <!-- Right Ring -->
+                    <div class="finger-card">
+                        <div class="finger-title">💍 Right Ring</div>
+                        <div class="finger-guide">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNzAsMjBINjBWMzBINzBaIiBmaWxsPSIjY2NjIi8+PHBhdGggZD0iTTYwLDIwVjMwQzYwLDQwLDUwLDUwLDQwLDUwQzMwLDUwLDIwLDQwLDIwLDMwVjIwIiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="Right Ring Guide">
+                        </div>
+                        <canvas class="finger-canvas" width="250" height="120" data-finger="right-ring"></canvas>
+                        <div class="finger-actions">
+                            <button class="btn btn-primary capture-btn" data-finger="right-ring">📷 Scan</button>
+                            <button class="btn btn-secondary clear-btn" data-finger="right-ring">🗑️ Clear</button>
+                            <button class="btn btn-accent download-btn" data-finger="right-ring">⤵️ Save</button>
+                        </div>
+                    </div>
+
+                    <!-- Right Little -->
+                    <div class="finger-card">
+                        <div class="finger-title">👉 Right Little</div>
+                        <div class="finger-guide">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNzUsMTVINjVWMjVINzVaIiBmaWxsPSIjY2NjIi8+PHBhdGggZD0iTTY1LDE1
