@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium QR Code Generator | AdSense Monetized</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID"></script>
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #34a853;
+            --dark-color: #202124;
+            --light-color: #f8f9fa;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        /* Ad containers */
+        .ad-container {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 15px 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .ad-top {
+            width: 100%;
+            height: auto;
+        }
+        
+        .ad-side {
+            display: none;
+        }
+        
+        .ad-bottom {
+            width: 100%;
+            height: auto;
+        }
+        
+        /* Main content */
+        .generator-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .controls {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        input[type="text"], input[type="color"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+        }
+        
+        .color-pickers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        button:hover {
+            background-color: #3367d6;
+        }
+        
+        .secondary-btn {
+            background-color: var(--secondary-color);
+        }
+        
+        .secondary-btn:hover {
+            background-color: #2d924a;
+        }
+        
+        /* QR Preview Area */
+        .qr-preview-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .qr-preview {
+            margin: 20px auto;
+            max-width: 300px;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #eee;
+        }
+        
+        /* Download Options */
+        .download-options {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .stats {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+            }
+            
+            .ad-side {
+                display: block;
+                width: 300px;
+                margin-right: 20px;
+                align-self: flex-start;
+                position: sticky;
+                top: 20px;
+            }
+            
+            .generator-container {
+                flex: 1;
+            }
+            
+            .color-pickers {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+        }
+        
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            .qr-preview-container {
+                page-break-inside: avoid;
+            }
+            
+            body {
+                background-color: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Ad (Desktop) -->
+        <div class="ad-side ad-container no-print">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                 data-ad-slot="SIDEBAR_SLOT"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+        
+        <div class="generator-container">
+            <!-- Top Banner Ad -->
+            <div class="ad-top ad-container no-print">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                     data-ad-slot="TOP_SLOT"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            
+            <header>
+                <h1>Premium QR Code Generator</h1>
+                <p>Create customized QR codes for free with our easy-to-use tool</p>
+            </header>
+            
+            <!-- QR Generator Form -->
+            <div class="controls">
+                <div class="input-group">
+                    <label for="qr-content">Enter URL or Text:</label>
+                    <input type="text" id="qr-content" placeholder="https://example.com">
+                </div>
+                
+                <div class="color-pickers">
+                    <div class="input-group">
+                        <label for="fg-color">Foreground Color:</label>
+                        <input type="color" id="fg-color" value="#000000">
+                    </div>
+                    <div class="input-group">
+                        <label for="bg-color">Background Color:</label>
+                        <input type="color" id="bg-color" value="#ffffff">
+                    </div>
+                    <div class="input-group">
+                        <label for="qr-size">Size (px):</label>
+                        <input type="range" id="qr-size" min="100" max="1000" value="300">
+                        <span id="size-value">300px</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="error-level">Error Correction:</label>
+                        <select id="error-level">
+                            <option value="L">Low (7%)</option>
+                            <option value="M">Medium (15%)</option>
+                            <option value="Q">Quartile (25%)</option>
+                            <option value="H" selected>High (30%)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="qr-count">Number of Codes to Generate:</label>
+                    <input type="number" id="qr-count" min="1" max="50" value="1">
+                </div>
+                
+                <button id="generate-btn">Generate QR Code</button>
+                <button id="print-btn" class="no-print" disabled>Print QR Code</button>
+            </div>
+            
+            <!-- QR Preview Area -->
+            <div class="qr-preview-container" id="qr-preview-container" style="display:none;">
+                <h2>Your QR Code</h2>
+                <div class="qr-preview">
+                    <canvas id="qr-canvas"></canvas>
+                </div>
+                
+                <!-- Download Options -->
+                <div class="download-options" id="download-options">
+                    <h3>Download Options</h3>
+                    <button id="download-png" class="secondary-btn">Download PNG</button>
+                    <button id="download-jpg" class="secondary-btn">Download JPEG</button>
+                    <button id="download-svg" class="secondary-btn">Download SVG</button>
+                    
+                    <!-- In-content Ad triggered after generation -->
+                    <div class="ad-container no-print" style="margin-top: 20px;">
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                             data-ad-slot="IN_CONTENT_SLOT"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                        <script>
+                             (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats no-print">
+                <h3>QR Codes Generated: <span id="codes-generated">0</span></h3>
+                <p>Thank you for using our free QR code generator!</p>
+            </div>
+            
+            <!-- Bottom Anchor Ad (Mobile) -->
+            <div class="ad-bottom ad-container no-print">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                     data-ad-slot="BOTTOM_SLOT"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script>
+        // Initialize variables
+        let codesGenerated = 0;
+        const codesGeneratedElement = document.getElementById('codes-generated');
+        
+        // DOM Elements
+        const qrContent = document.getElementById('qr-content');
+        const fgColor = document.getElementById('fg-color');
+        const bgColor = document.getElementById('bg-color');
+        const qrSize = document.getElementById('qr-size');
+        const sizeValue = document.getElementById('size-value');
+        const errorLevel = document.getElementById('error-level');
+        const qrCount = document.getElementById('qr-count');
+        const generateBtn = document.getElementById('generate-btn');
+        const printBtn = document.getElementById('print-btn');
+        const qrPreviewContainer = document.getElementById('qr-preview-container');
+        const qrCanvas = document.getElementById('qr-canvas');
+        const downloadPng = document.getElementById('download-png');
+        const downloadJpg = document.getElementById('download-jpg');
+        const downloadSvg = document.getElementById('download-svg');
+        const downloadOptions = document.getElementById('download-options');
+        
+        // Update size value display
+        qrSize.addEventListener('input', function() {
+            sizeValue.textContent = `${this.value}px`;
+        });
+        
+        // Generate QR Code
+        generateBtn.addEventListener('click', function() {
+            const content = qrContent.value;
+            const count = parseInt(qrCount.value) || 1;
+            
+            if (!content) {
+                alert('Please enter content for the QR code');
+                return;
+            }
+            
+            if (count > 1) {
+                if (!confirm(`This will generate ${count} QR codes. Continue?`)) {
+                    return;
+                }
+            }
+            
+            generateQRCode(content, count);
+        });
+        
+        // Print QR Code
+        printBtn.addEventListener('click', function() {
+            window.print();
+        });
+        
+        // Download Handlers
+        downloadPng.addEventListener('click', function() {
+            downloadQRCode('png');
+        });
+        
+        downloadJpg.addEventListener('click', function() {
+            downloadQRCode('jpeg');
+        });
+        
+        downloadSvg.addEventListener('click', function() {
+            downloadQRCode('svg');
+        });
+        
+        // QR Code Generation Function
+        function generateQRCode(content, count = 1) {
+            const color = fgColor.value;
+            const bgcolor = bgColor.value;
+            const size = parseInt(qrSize.value);
+            const level = errorLevel.value;
+            
+            // Clear previous QR codes
+            qrPreviewContainer.style.display = 'block';
+            qrCanvas.width = size;
+            qrCanvas.height = size;
+            
+            // Generate multiple QR codes if count > 1
+            if (count > 1) {
+                let html = '<h2>Your QR Codes</h2><div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin: 20px 0;">';
+                
+                for (let i = 0; i < count; i++) {
+                    const qr = qrcode(0, level);
+                    qr.addData(content);
+                    qr.make();
+                    
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = size;
+                    tempCanvas.height = size;
+                    const ctx = tempCanvas.getContext('2d');
+                    
+                    // Background
+                    ctx.fillStyle = bgcolor;
+                    ctx.fillRect(0, 0, size, size);
+                    
+                    // Draw QR code
+                    const cells = qr.modules;
+                    const tileSize = size / cells.length;
+                    ctx.fillStyle = color;
+                    
+                    for (let row = 0; row < cells.length; row++) {
+                        for (let col = 0; col < cells[row].length; col++) {
+                            if (cells[row][col]) {
+                                ctx.fillRect(
+                                    col * tileSize,
+                                    row * tileSize,
+                                    tileSize,
+                                    tileSize
+                                );
+                            }
+                        }
+                    }
+                    
+                    html += `<div style="text-align: center;"><img src="${tempCanvas.toDataURL('image/png')}" style="max-width: 100%; border: 1px solid #eee;"><p style="margin-top: 5px; font-size: 12px;">QR Code ${i+1}</p></div>`;
+                }
+                
+                html += '</div>';
+                qrPreviewContainer.innerHTML = html + '<button onclick="window.print()" class="no-print" style="margin: 20px auto; display: block;">Print All QR Codes</button>';
+                
+                // Update stats
+                codesGenerated += count;
+                codesGeneratedElement.textContent = codesGenerated;
+                
+                // Trigger AdSense refresh
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                return;
+            }
+            
+            // Single QR code generation
+            const qr = qrcode(0, level);
+            qr.addData(content);
+            qr.make();
+            
+            const ctx = qrCanvas.getContext('2d');
+            
+            // Background
+            ctx.fillStyle = bgcolor;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Draw QR code
+            const cells = qr.modules;
+            const tileSize = size / cells.length;
+            ctx.fillStyle = color;
+            
+            for (let row = 0; row < cells.length; row++) {
+                for (let col = 0; col < cells[row].length; col++) {
+                    if (cells[row][col]) {
+                        ctx.fillRect(
+                            col * tileSize,
+                            row * tileSize,
+                            tileSize,
+                            tileSize
+                        );
+                    }
+                }
+            }
+            
+            // Show download options
+            downloadOptions.style.display = 'block';
+            printBtn.disabled = false;
+            
+            // Update stats
+            codesGenerated++;
+            codesGeneratedElement.textContent = codesGenerated;
+            
+            // Trigger AdSense refresh
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+        
+        // Download QR Code Function
+        function downloadQRCode(format) {
+            const content = qrContent.value;
+            const color = fgColor.value;
+            const bgcolor = bgColor.value;
+            const size = parseInt(qrSize.value);
+            const level = errorLevel.value;
+            
+            if (format === 'svg') {
+                // SVG generation
+                const qr = qrcode(0, level);
+                qr.addData(content);
+                qr.make();
+                
+                const cells = qr.modules;
+                const tileSize = size / cells.length;
+                
+                let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`;
+                svg += `<rect width="100%" height="100%" fill="${bgcolor}"/>`;
+                
+                for (let row = 0; row < cells.length; row++) {
+                    for (let col = 0; col < cells[row].length; col++) {
+                        if (cells[row][col]) {
+                            svg += `<rect x="${col * tileSize}" y="${row * tileSize}" width="${tileSize}" height="${tileSize}" fill="${color}"/>`;
+                        }
+                    }
+                }
+                
+                svg += '</svg>';
+                
+                const blob = new Blob([svg], {type: 'image/svg+xml'});
+                saveAs(blob, `qr-code-${Date.now()}.svg`);
+            } else {
+                // Canvas-based formats (PNG, JPEG)
+                qrCanvas.toBlob(function(blob) {
+                    saveAs(blob, `qr-code-${Date.now()}.${format}`);
+                }, `image/${format}`, 1);
+            }
+            
+            // Trigger AdSense refresh
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+        
+        // Initialize AdSense ads
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</body>
+</html>
